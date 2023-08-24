@@ -1,6 +1,13 @@
-import { StyleSheet, Text, View, TextInput, Pressable, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, collection, addDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import reduxActions from "../redux/actions";
@@ -29,7 +36,9 @@ export default function SignUp({ navigation }) {
   }, [email]);
 
   useEffect(() => {
-    setSubmitEnabled(passwordsMatch && emailValid && name !== "" && password !== '');
+    setSubmitEnabled(
+      passwordsMatch && emailValid && name !== "" && password !== ""
+    );
   }, [passwordsMatch, emailValid, name]);
 
   const signUp = async () => {
@@ -50,6 +59,29 @@ export default function SignUp({ navigation }) {
           } catch (e) {
             console.error("Error adding document: ", e);
           }
+          //create intital data
+          //get refs
+          const userRef = doc(db, "users", user.uid);
+          const userBudgetsRef = collection(userRef, "budgets");
+          const userSavingsRef = collection(userRef, "savings");
+          //set initial budgets
+          addDoc(userBudgetsRef, { title: "Grocery", amount: 250 });
+          addDoc(userBudgetsRef, { title: "Dining", amount: 100 });
+          addDoc(userBudgetsRef, { title: "Utilities", amount: 200 });
+          //set initial savings
+          const date = new Date();
+          addDoc(userSavingsRef, {
+            title: "Retirement",
+            goal: 1000000,
+            date: date,
+            returnRate: 4,
+          });
+          addDoc(userSavingsRef, {
+            title: "Emergency Fund",
+            goal: 2500,
+            date: date,
+            returnRate: 4,
+          });
           //dispatch redux login
           await dispatch(reduxActions.userActions.loginUser(user.uid));
         })

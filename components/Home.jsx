@@ -1,21 +1,112 @@
-import { StyleSheet, Text, View, StatusBar, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  Image,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import BudgetTile from "./BudgetTile";
+import SavingTile from "./SavingTile";
 
 export default function Home({ navigation }) {
   const name = useSelector((state) => state.userReducer.name);
+  const budgets = useSelector((state) => state.userReducer.budgets);
+  const savings = useSelector((state) => state.userReducer.savings);
+  const [selected, setSelected] = useState("spend");
 
   return (
     <View style={styles.container}>
-      {/* Status Bar */}
-      <View style={styles.topBar}>
-        <View>
-          <Text style={styles.welcomeText}>Good Morning,</Text>
-          <Text style={styles.nameText}>{name}</Text>
+      {/* Upper Container (blue section) */}
+      <View style={styles.upperContainer}>
+        {/* Status Bar */}
+        <View style={styles.topBar}>
+          <View>
+            <Text style={styles.welcomeText}>Good Morning,</Text>
+            <Text style={styles.nameText}>{name}</Text>
+          </View>
+          <Image
+            style={styles.image}
+            source={require("../assets/profile-default.png")}
+          />
         </View>
-        <Image
-          style={styles.image}
-          source={require("../assets/profile-default.png")}
-        />
+        {/* Toggle Switch */}
+        <View style={styles.toggleContainer}>
+          <Text
+            onPress={() => setSelected("spend")}
+            style={
+              selected == "spend"
+                ? styles.toggleTextSelected
+                : styles.toggleText
+            }
+          >
+            Spend
+          </Text>
+          <Text style={styles.toggleSeperator}>|</Text>
+          <Text
+            onPress={() => setSelected("save")}
+            style={
+              selected == "save" ? styles.toggleTextSelected : styles.toggleText
+            }
+          >
+            Save
+          </Text>
+        </View>
+      </View>
+      {/* Lower Container (white section) */}
+      <View>
+        <ScrollView>
+          {selected == "spend" ? (
+            <>
+              {budgets.map((budget) => {
+                return (
+                  <BudgetTile
+                    key={budget.title}
+                    title={budget.title}
+                    spent={"$100"}
+                    total={"$" + budget.amount}
+                  />
+                );
+              })}
+            </>
+          ) : (
+            <>
+              {savings.map((saving) => {
+                return (
+                  <SavingTile
+                    key={saving.title}
+                    title={saving.title}
+                    progress={"$100"}
+                    total={"$" + saving.goal}
+                  />
+                );
+              })}
+            </>
+          )}
+          <View style={styles.doubleButtonContainer}>
+            <Pressable style={styles.halfButton}>
+              <Text style={styles.halfButtonText}>
+                {selected == "spend" ? "Add Transaction" : "Add Contribution"}
+              </Text>
+            </Pressable>
+            <View style={styles.spacer} />
+            <Pressable
+              onPress={
+                selected == "spend"
+                  ? () => navigation.navigate("Manage Budgets")
+                  : () => navigation.navigate("Manage Savings")
+              }
+              style={styles.halfButton}
+            >
+              <Text style={styles.halfButtonText}>
+                {selected == "spend" ? "Manage Budgets" : "Manage Goals"}
+              </Text>
+            </Pressable>
+          </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -24,12 +115,11 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight,
   },
   topBar: {
-    flex: 1,
     flexDirection: "row",
     width: "100%",
+    marginTop: StatusBar.currentHeight,
     paddingVertical: 8,
     paddingHorizontal: 12,
   },
@@ -46,5 +136,65 @@ const styles = StyleSheet.create({
     height: 50,
     marginRight: 0,
     marginLeft: "auto",
+  },
+  upperContainer: {
+    backgroundColor: "#2196f3",
+    width: "100%",
+    height: "35%",
+  },
+  toggleContainer: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    width: "80%",
+    alignSelf: "center",
+    borderRadius: 20,
+    paddingVertical: 4,
+    marginTop: 4,
+  },
+  toggleText: {
+    fontSize: 24,
+    lineHeight: 24,
+    paddingTop: 3,
+    maxHeight: 30,
+    width: "48%",
+    textAlign: "center",
+  },
+  toggleTextSelected: {
+    fontSize: 24,
+    lineHeight: 24,
+    paddingTop: 3,
+    maxHeight: 30,
+    width: "48%",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  toggleSeperator: {
+    fontSize: 24,
+    lineHeight: 24,
+    paddingTop: 2,
+    maxHeight: 30,
+    width: "4%",
+    textAlign: "center",
+  },
+  doubleButtonContainer: {
+    flexDirection: "row",
+    width: "90%",
+    alignSelf: "center",
+    marginTop: 6,
+  },
+  spacer: {
+    width: "4%",
+  },
+  halfButton: {
+    width: "48%",
+    backgroundColor: "lightgray",
+    borderRadius: 30,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  halfButtonText: {
+    textAlign: "center",
+    fontSize: 20,
   },
 });
