@@ -26,7 +26,7 @@ export default function Login({ navigation }) {
         .then(async (userCredential) => {
           // Signed in
           const user = userCredential.user;
-          await dispatch(reduxActions.userActions.loginUser(user.uid));
+          await dispatch(reduxActions.userActions.getAllUserData(user.uid));
         })
         .catch((error) => {
           const errorCode = error.code;

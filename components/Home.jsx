@@ -7,16 +7,18 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import BudgetTile from "./BudgetTile";
 import SavingTile from "./SavingTile";
+import reduxActions from "../redux/actions";
 
 export default function Home({ navigation }) {
   const name = useSelector((state) => state.userReducer.name);
   const budgets = useSelector((state) => state.userReducer.budgets);
   const savings = useSelector((state) => state.userReducer.savings);
   const [selected, setSelected] = useState("spend");
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
@@ -66,7 +68,7 @@ export default function Home({ navigation }) {
                   <BudgetTile
                     key={budget.title}
                     title={budget.title}
-                    spent={"$100"}
+                    spent={"$" + budget.current}
                     total={"$" + budget.amount}
                   />
                 );
@@ -79,7 +81,7 @@ export default function Home({ navigation }) {
                   <SavingTile
                     key={saving.title}
                     title={saving.title}
-                    progress={"$100"}
+                    progress={"$" + saving.current}
                     total={"$" + saving.goal}
                   />
                 );
@@ -113,6 +115,7 @@ export default function Home({ navigation }) {
               </Text>
             </Pressable>
           </View>
+          {/* <Pressable onPress={() => dispatch(reduxActions.userActions.refreshBudgets())}><Text style={styles.halfButtonText}>RELOAD</Text></Pressable> */}
         </ScrollView>
       </View>
     </View>

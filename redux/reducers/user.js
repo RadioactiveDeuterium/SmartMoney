@@ -9,6 +9,7 @@ import { createReducer } from "@reduxjs/toolkit";
 const initialState = {
     loggedIn: false,
     uid: null,
+    userRef: null,
     name: null,
     budgetsRef: null,
     budgets: null,
@@ -21,6 +22,7 @@ const userReducer = createReducer(initialState, (builder) => {
     builder.addCase(LOGIN_USER, (state, action) => {
         state.loggedIn = true;
         state.uid = action.payload.uid;
+        state.userRef = action.payload.userRef;
         state.name = action.payload.name;
         state.budgetsRef = action.payload.budgetsRef;
         state.budgets = action.payload.budgets;

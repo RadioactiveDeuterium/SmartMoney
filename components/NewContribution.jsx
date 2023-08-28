@@ -13,9 +13,9 @@ import { DatePickerModal } from "react-native-paper-dates";
 import { addDoc, collection } from "firebase/firestore";
 import reduxActions from "../redux/actions";
 
-export default function NewTransaction({ navigation }) {
+export default function NewContribution({ navigation }) {
   const dispatch = useDispatch();
-  const budgets = useSelector((state) => state.userReducer.budgets);
+  const savings = useSelector((state) => state.userReducer.savings);
   const uid = useSelector((state) => state.userReducer.uid);
   const [canCreate, setCanCreate] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,22 +28,21 @@ export default function NewTransaction({ navigation }) {
   const [date, setDate] = useState(new Date());
   // other inputs
   const [amount, setAmount] = useState("");
-  const [merchant, setMerchant] = useState("");
   const [isAmountValid, setIsAmountValid] = useState(false);
 
   useEffect(() => {
-    if (budgets) {
+    if (savings) {
       const values = [];
-      for (const budget of budgets) {
+      for (const saving of savings) {
         values.push({
-          id: budget.title,
-          label: budget.title,
-          value: budget.ref,
+          id: saving.title,
+          label: saving.title,
+          value: saving.ref,
         });
       }
       setDropdownItems(values);
     }
-  }, [budgets]);
+  }, [savings]);
 
   const onDateConfirm = useCallback(
     (params) => {
@@ -53,16 +52,15 @@ export default function NewTransaction({ navigation }) {
     [setDateModalOpen, setDate]
   );
 
-  const saveTransaction = async () => {
+  const saveContribution = async () => {
     if (canCreate) {
       setLoading(true);
-      const transactionsRef = collection(dropdownValue, "transactions");
-      await addDoc(transactionsRef, {
+      const contributionsRef = collection(dropdownValue, "contributions");
+      await addDoc(contributionsRef, {
         amount: amount,
-        merchant: merchant,
         date: date,
       });
-      dispatch(reduxActions.userActions.refreshBudgets());
+      dispatch(reduxActions.userActions.refreshSavings());
       setLoading(false);
       navigation.navigate("Home");
     }
@@ -70,8 +68,8 @@ export default function NewTransaction({ navigation }) {
 
   useEffect(() => {
     setIsAmountValid(/^[0-9]+$/.test(amount));
-    setCanCreate(isAmountValid && dropdownValue !== null && merchant !== "");
-  }, [amount, isAmountValid, merchant, dropdownValue]);
+    setCanCreate(isAmountValid && dropdownValue !== null);
+  }, [amount, isAmountValid, dropdownValue]);
 
   return (
     <>
@@ -85,7 +83,7 @@ export default function NewTransaction({ navigation }) {
           setOpen={setDropdownOpen}
           setValue={setDropdownValue}
           setItems={setDropdownItems}
-          placeholder="Select a Budget"
+          placeholder="Select a Goal"
         />
         {/* Amount */}
         <Text style={styles.label}>Amount ($):</Text>
@@ -98,14 +96,6 @@ export default function NewTransaction({ navigation }) {
         {!isAmountValid && amount !== "" ? (
           <Text style={styles.errorText}>Enter a valid number</Text>
         ) : null}
-        {/* Merchant */}
-        <Text style={styles.label}>Merchant:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Store Name"
-          value={merchant}
-          onChangeText={setMerchant}
-        />
         {/* Date */}
         <Text style={styles.label}>Date:</Text>
         <TextInput
@@ -116,7 +106,7 @@ export default function NewTransaction({ navigation }) {
         />
         {/* Save button */}
         <Pressable style={canCreate ? styles.button : styles.buttonDisabled}>
-          <Text onPress={saveTransaction}>Save</Text>
+          <Text onPress={saveContribution}>Save</Text>
         </Pressable>
       </View>
       <DatePickerModal

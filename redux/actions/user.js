@@ -1,7 +1,60 @@
-import { LOGIN_USER, REFRESH_BUDGETS, REFRESH_SAVINGS, SET_EDITING_REF } from "../constants";
-import { doc, getDoc, getDocs, collection, getDocFromServer, getDocsFromServer } from "firebase/firestore";
+import {
+    LOGIN_USER,
+    REFRESH_BUDGETS,
+    REFRESH_SAVINGS,
+    SET_EDITING_REF,
+} from "../constants";
+import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 
-const loginUser = (uid) => {
+const getBudgets = async(budgetsRef) => {
+    let budgets = [];
+    const budgetsSnapshot = await getDocs(budgetsRef);
+    const documents = budgetsSnapshot.docs;
+    for (const doc of documents) {
+        let transactions = [];
+        let currentSum = 0;
+        const transactionsRef = collection(doc.ref, "transactions");
+        const transactionsSnapshot = await getDocs(transactionsRef);
+        transactionsSnapshot.forEach((doc) => {
+            transactions.push({ ref: doc.ref, ...doc.data() });
+            currentSum += Number(doc.data().amount);
+        });
+        budgets.push({
+            ref: doc.ref,
+            transactionsRef: transactionsRef,
+            transactions: transactions,
+            current: currentSum,
+            ...doc.data(),
+        });
+    }
+    return budgets;
+};
+
+const getSavings = async(savingsRef) => {
+    let savings = [];
+    const savingsSnapshot = await getDocs(savingsRef);
+    const documents = savingsSnapshot.docs;
+    for (const doc of documents) {
+        let contributions = [];
+        let currentSum = 0;
+        const contributionsRef = collection(doc.ref, "contributions");
+        const contributionsSnapshot = await getDocs(contributionsRef);
+        contributionsSnapshot.forEach((doc) => {
+            contributions.push({ ref: doc.ref, ...doc.data() });
+            currentSum += Number(doc.data().amount);
+        });
+        savings.push({
+            ref: doc.ref,
+            contributionsRef: contributionsRef,
+            contributions: contributions,
+            current: currentSum,
+            ...doc.data(),
+        });
+    }
+    return savings;
+};
+
+const getAllUserData = (uid) => {
     return async(dispatch, getState) => {
         //get db object
         const state = getState();
@@ -13,27 +66,12 @@ const loginUser = (uid) => {
         const name = userSnap.data().name;
 
         //get user budgets
-        let budgets = [];
         const budgetsRef = collection(userRef, "budgets");
-        const budgetsSnapshot = await getDocs(budgetsRef);
-        budgetsSnapshot.forEach(async(doc) => {
-            let transactions = [];
-            const transactionsRef = collection(doc.ref, "transactions");
-            const transactionsSnapshot = await getDocs(transactionsRef);
-            transactionsSnapshot.forEach((doc) => {
-                console.log(doc.data());
-                transactions.push({ ref: doc.ref, ...doc.data() });
-            })
-            budgets.push({ ref: doc.ref, transactionsRef: transactionsRef, transactions: transactions, ...doc.data() });
-        });
+        const budgets = await getBudgets(budgetsRef);
 
         //get user savings
-        let savings = [];
         const savingsRef = collection(userRef, "savings");
-        const savingsSnapshot = await getDocs(savingsRef);
-        savingsSnapshot.forEach((doc) => {
-            savings.push({ ref: doc.ref, ...doc.data() });
-        });
+        const savings = await getSavings(savingsRef);
 
         //set data
         await dispatch({
@@ -41,6 +79,7 @@ const loginUser = (uid) => {
             payload: {
                 uid: uid,
                 name: name,
+                userRef: userRef,
                 budgetsRef: budgetsRef,
                 budgets: budgets,
                 savingsRef: savingsRef,
@@ -53,14 +92,10 @@ const loginUser = (uid) => {
 
 const refreshBudgets = () => {
     return async(dispatch, getState) => {
+        console.log("refreshing budgets");
         const state = getState();
-        //get user budgets
-        let budgets = [];
         const budgetsRef = state.userReducer.budgetsRef;
-        const budgetsSnapshot = await getDocs(budgetsRef);
-        budgetsSnapshot.forEach(async(doc) => {
-            budgets.push({ ref: doc.ref, ...doc.data() });
-        });
+        const budgets = await getBudgets(budgetsRef);
 
         //set data
         await dispatch({
@@ -72,14 +107,10 @@ const refreshBudgets = () => {
 
 const refreshSavings = () => {
     return async(dispatch, getState) => {
+        console.log("refreshing savings")
         const state = getState();
-        //get user savings
-        let savings = [];
         const savingsRef = state.userReducer.savingsRef;
-        const savingsSnapshot = await getDocs(savingsRef);
-        savingsSnapshot.forEach((doc) => {
-            savings.push({ ref: doc.ref, ...doc.data() });
-        });
+        const savings = await getSavings(savingsRef);
 
         //set data
         await dispatch({
@@ -97,10 +128,10 @@ const setEditingRef = (ref) => {
             payload: { editingRef: ref },
         });
     };
-}
+};
 
 const userActions = {
-    loginUser,
+    getAllUserData,
     refreshBudgets,
     refreshSavings,
     setEditingRef,
