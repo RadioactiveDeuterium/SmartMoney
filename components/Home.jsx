@@ -88,7 +88,14 @@ export default function Home({ navigation }) {
           )}
           <View style={styles.doubleButtonContainer}>
             <Pressable style={styles.halfButton}>
-              <Text style={styles.halfButtonText}>
+              <Text
+                onPress={
+                  selected == "spend"
+                    ? () => navigation.navigate("New Transaction")
+                    : () => navigation.navigate("New Contribution")
+                }
+                style={styles.halfButtonText}
+              >
                 {selected == "spend" ? "Add Transaction" : "Add Contribution"}
               </Text>
             </Pressable>

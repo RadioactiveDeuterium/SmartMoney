@@ -16,6 +16,7 @@ import ManageBudgets from "./components/ManageBudgets";
 import ManageSavings from "./components/ManageSavings";
 import CreateSaving from "./components/CreateSaving";
 import EditSaving from "./components/EditSaving";
+import NewTransaction from "./components/NewTransaction";
 
 export default function Navigation() {
   const dispatch = useDispatch();
@@ -72,6 +73,11 @@ export default function Navigation() {
           <Stack.Screen
             name="Edit Goal"
             component={EditSaving}
+            options={{ headerTitleAlign: "center" }}
+          />
+          <Stack.Screen
+            name="New Transaction"
+            component={NewTransaction}
             options={{ headerTitleAlign: "center" }}
           />
         </Stack.Navigator>

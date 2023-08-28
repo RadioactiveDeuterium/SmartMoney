@@ -28,8 +28,6 @@ export default function EditSaving({ navigation }) {
   const [isGoalValid, setIsGoalValid] = useState(false);
   const [isReturnRateValid, setIsReturnRateValid] = useState(false);
 
-
-
   useEffect(() => {
     setIsGoalValid(/^[0-9]+$/.test(goal));
     setIsReturnRateValid(/^[0-9]+$/.test(returnRate));

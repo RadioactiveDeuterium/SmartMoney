@@ -1,5 +1,5 @@
 import { LOGIN_USER, REFRESH_BUDGETS, REFRESH_SAVINGS, SET_EDITING_REF } from "../constants";
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, getDocFromServer, getDocsFromServer } from "firebase/firestore";
 
 const loginUser = (uid) => {
     return async(dispatch, getState) => {
@@ -16,8 +16,15 @@ const loginUser = (uid) => {
         let budgets = [];
         const budgetsRef = collection(userRef, "budgets");
         const budgetsSnapshot = await getDocs(budgetsRef);
-        budgetsSnapshot.forEach((doc) => {
-            budgets.push({ ref: doc.ref, ...doc.data() });
+        budgetsSnapshot.forEach(async(doc) => {
+            let transactions = [];
+            const transactionsRef = collection(doc.ref, "transactions");
+            const transactionsSnapshot = await getDocs(transactionsRef);
+            transactionsSnapshot.forEach((doc) => {
+                console.log(doc.data());
+                transactions.push({ ref: doc.ref, ...doc.data() });
+            })
+            budgets.push({ ref: doc.ref, transactionsRef: transactionsRef, transactions: transactions, ...doc.data() });
         });
 
         //get user savings
@@ -51,7 +58,7 @@ const refreshBudgets = () => {
         let budgets = [];
         const budgetsRef = state.userReducer.budgetsRef;
         const budgetsSnapshot = await getDocs(budgetsRef);
-        budgetsSnapshot.forEach((doc) => {
+        budgetsSnapshot.forEach(async(doc) => {
             budgets.push({ ref: doc.ref, ...doc.data() });
         });
 
