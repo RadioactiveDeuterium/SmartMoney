@@ -54,7 +54,7 @@ const getSavings = async(savingsRef) => {
     return savings;
 };
 
-const getAllUserData = (uid) => {
+const loginUser = (uid) => {
     return async(dispatch, getState) => {
         //get db object
         const state = getState();
@@ -131,7 +131,7 @@ const setEditingRef = (ref) => {
 };
 
 const userActions = {
-    getAllUserData,
+    loginUser,
     refreshBudgets,
     refreshSavings,
     setEditingRef,

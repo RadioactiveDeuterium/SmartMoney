@@ -7,18 +7,27 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import BudgetTile from "./BudgetTile";
 import SavingTile from "./SavingTile";
-import reduxActions from "../redux/actions";
 
 export default function Home({ navigation }) {
   const name = useSelector((state) => state.userReducer.name);
   const budgets = useSelector((state) => state.userReducer.budgets);
   const savings = useSelector((state) => state.userReducer.savings);
   const [selected, setSelected] = useState("spend");
-  const dispatch = useDispatch();
+  const [greeting, setGreeting] = useState("Good Morning,")
+
+  useEffect(() => { 
+    const date = new Date();
+    const hour = date.getHours();
+    if (hour > 12 && hour < 17) {
+      setGreeting("Good Afternoon,");
+    } else if (hour >= 17) {
+      setGreeting("Good Evening,")
+    }
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -27,7 +36,7 @@ export default function Home({ navigation }) {
         {/* Status Bar */}
         <View style={styles.topBar}>
           <View>
-            <Text style={styles.welcomeText}>Good Morning,</Text>
+            <Text style={styles.welcomeText}>{greeting}</Text>
             <Text style={styles.nameText}>{name}</Text>
           </View>
           <Image
@@ -68,8 +77,8 @@ export default function Home({ navigation }) {
                   <BudgetTile
                     key={budget.title}
                     title={budget.title}
-                    spent={"$" + budget.current}
-                    total={"$" + budget.amount}
+                    spent={budget.current}
+                    total={budget.amount}
                   />
                 );
               })}

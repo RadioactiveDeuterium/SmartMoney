@@ -3,16 +3,16 @@ import { StyleSheet, Text, View, Image } from "react-native";
 export default function SavingTile({ title, progress, total }) {
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require("../assets/placeholder.svg")}
-      />
-      <View>
+      <View style={styles.leftHalf}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.value}>
           {progress}/{total}
         </Text>
       </View>
+      <Image
+        style={styles.image}
+        source={require("../assets/right-arrow.png")}
+      />
     </View>
   );
 }
@@ -29,9 +29,10 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   image: {
-    width: 80,
-    height: 80,
-    marginRight: 6
+    width: 60,
+    height: 60,
+    marginRight: 6,
+    marginVertical: 10
   },
   title: {
     fontSize: 24,
@@ -41,4 +42,8 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 24,
   },
+  leftHalf: {
+    marginLeft: 8,
+    flexGrow: 1
+  }
 });

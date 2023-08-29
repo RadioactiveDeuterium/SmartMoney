@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 
-export default function BudgetTile({title, spent, total }) {
+export default function BudgetTile({title, spent, total}) {
+  const underArrow = require("../assets/under-arrow.png")
+  const overArrow = require("../assets/over-arrow.png")
   return (
     <View style={styles.container}>
       <Image
             style={styles.image}
-            source={require("../assets/placeholder.svg")}
+            source={(Number(spent) > Number(total)) ? overArrow : underArrow }
           />
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.value}>{spent}/{total}</Text>
+      <Text style={styles.value}>${spent}/${total}</Text>
     </View>
   );
 }
@@ -25,8 +27,10 @@ const styles = StyleSheet.create({
     marginVertical: 6
   },
   image: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
+    marginVertical: 5,
+    marginHorizontal: 5
   },
   title: {
     fontSize: 26,

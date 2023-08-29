@@ -16,7 +16,6 @@ import reduxActions from "../redux/actions";
 export default function NewTransaction({ navigation }) {
   const dispatch = useDispatch();
   const budgets = useSelector((state) => state.userReducer.budgets);
-  const uid = useSelector((state) => state.userReducer.uid);
   const [canCreate, setCanCreate] = useState(false);
   const [loading, setLoading] = useState(false);
   // dropdown
@@ -36,7 +35,6 @@ export default function NewTransaction({ navigation }) {
       const values = [];
       for (const budget of budgets) {
         values.push({
-          id: budget.title,
           label: budget.title,
           value: budget.ref,
         });

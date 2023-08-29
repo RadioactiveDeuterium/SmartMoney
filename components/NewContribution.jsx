@@ -16,7 +16,6 @@ import reduxActions from "../redux/actions";
 export default function NewContribution({ navigation }) {
   const dispatch = useDispatch();
   const savings = useSelector((state) => state.userReducer.savings);
-  const uid = useSelector((state) => state.userReducer.uid);
   const [canCreate, setCanCreate] = useState(false);
   const [loading, setLoading] = useState(false);
   // dropdown
@@ -35,7 +34,6 @@ export default function NewContribution({ navigation }) {
       const values = [];
       for (const saving of savings) {
         values.push({
-          id: saving.title,
           label: saving.title,
           value: saving.ref,
         });

@@ -83,7 +83,7 @@ export default function SignUp({ navigation }) {
             returnRate: 4,
           });
           //dispatch redux login
-          await dispatch(reduxActions.userActions.getAllUserData(user.uid));
+          await dispatch(reduxActions.userActions.loginUser(user.uid));
         })
         .then()
         .catch((error) => {
