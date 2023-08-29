@@ -18,6 +18,7 @@ import CreateSaving from "./components/CreateSaving";
 import EditSaving from "./components/EditSaving";
 import NewTransaction from "./components/NewTransaction";
 import NewContribution from "./components/NewContribution";
+import BudgetDashboard from "./components/BudgetDashboard";
 
 export default function Navigation() {
   const dispatch = useDispatch();
@@ -85,6 +86,11 @@ export default function Navigation() {
             name="New Contribution"
             component={NewContribution}
             options={{ headerTitleAlign: "center" }}
+          />
+          <Stack.Screen
+            name="Budget Dashboard"
+            component={BudgetDashboard}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

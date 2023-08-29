@@ -1,17 +1,26 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, Image, Pressable } from "react-native";
+import { useDispatch } from "react-redux";
+import reduxActions from "../redux/actions";
 
-export default function BudgetTile({title, spent, total}) {
+export default function BudgetTile({budget, navigation}) {
+  const dispatch = useDispatch();
   const underArrow = require("../assets/under-arrow.png")
   const overArrow = require("../assets/over-arrow.png")
+
+  const navigateToDashboard = () => {
+    dispatch(reduxActions.userActions.setBudgetDashboard(budget));
+    navigation.navigate("Budget Dashboard");
+  }
+
   return (
-    <View style={styles.container}>
+    <Pressable onPress={navigateToDashboard} style={styles.container}>
       <Image
             style={styles.image}
-            source={(Number(spent) > Number(total)) ? overArrow : underArrow }
+            source={(Number(budget.current) > Number(budget.amount)) ? overArrow : underArrow }
           />
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.value}>${spent}/${total}</Text>
-    </View>
+      <Text style={styles.title}>{budget.title}</Text>
+      <Text style={styles.value}>${budget.current}/${budget.amount}</Text>
+    </Pressable>
   );
 }
 

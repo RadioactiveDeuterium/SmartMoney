@@ -2,9 +2,46 @@ import {
     LOGIN_USER,
     REFRESH_BUDGETS,
     REFRESH_SAVINGS,
+    SET_BUDGET_REF,
     SET_EDITING_REF,
 } from "../constants";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+
+const decrementMonth = (month, year, i) => {
+    const newMonth = month - i;
+    const newYear = year;
+    if (newMonth <= 0) {
+        newMonth = 12 - newMonth;
+        newYear = year - 1;
+    }
+    return [newMonth, newYear];
+}
+
+const createBudgetData = (transactions) => {
+    // budgets will be categorized by month
+    // last 6 months of detailed data will be avaliable in the app
+    // start by determing the current month + year and work back
+    const today = new Date();
+    const currMonth = today.getMonth();
+    const currYear = today.getFullYear();
+
+    let budgetDetails = [];
+    for (let i = 0; i < 6; i++) {
+        //calc month to fetch budgets from
+        const [newMonth, newYear] = decrementMonth(currMonth, currYear, i);
+        let monthlyTransactions = [];
+        let monthlyTotal = 0;
+        for (const txn of transactions) {
+            const txnDate = txn.date.toDate();
+            if (txnDate.getMonth() == newMonth && txnDate.getFullYear() == newYear) {
+                monthlyTransactions.push(txn);
+                monthlyTotal += Number(txn.amount);
+            }
+        }
+        budgetDetails.push({ month: newMonth, year: newYear, transactions: monthlyTransactions, monthlyTotal: monthlyTotal });
+    }
+    return budgetDetails;
+}
 
 const getBudgets = async(budgetsRef) => {
     let budgets = [];
@@ -19,11 +56,13 @@ const getBudgets = async(budgetsRef) => {
             transactions.push({ ref: doc.ref, ...doc.data() });
             currentSum += Number(doc.data().amount);
         });
+        const details = createBudgetData(transactions);
         budgets.push({
             ref: doc.ref,
             transactionsRef: transactionsRef,
             transactions: transactions,
             current: currentSum,
+            monthlyBreakdown: details,
             ...doc.data(),
         });
     }
@@ -130,11 +169,23 @@ const setEditingRef = (ref) => {
     };
 };
 
+const setBudgetDashboard = (budget) => {
+    return async(dispatch, getState) => {
+        //set data
+        console.log('set dashboard:')
+        await dispatch({
+            type: SET_BUDGET_REF,
+            payload: { budgetDashboard: budget },
+        });
+    };
+};
+
 const userActions = {
     loginUser,
     refreshBudgets,
     refreshSavings,
     setEditingRef,
+    setBudgetDashboard
 };
 
 export default userActions;

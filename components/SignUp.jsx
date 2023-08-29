@@ -50,7 +50,6 @@ export default function SignUp({ navigation }) {
         .then(async (userCredential) => {
           //Create user sucessful
           user = userCredential.user;
-          console.log("account created");
           //User created, init user data
           try {
             await setDoc(doc(db, "users", user.uid), {
