@@ -4,6 +4,7 @@ import {
     REFRESH_SAVINGS,
     SET_BUDGET_REF,
     SET_EDITING_REF,
+    SET_SAVING_REF,
 } from "../constants";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 
@@ -41,6 +42,29 @@ const createBudgetData = (transactions) => {
         budgetDetails.push({ month: newMonth, year: newYear, transactions: monthlyTransactions, monthlyTotal: monthlyTotal });
     }
     return budgetDetails;
+}
+
+const createSavingData = (contributions) => {
+    const today = new Date();
+    const currMonth = today.getMonth();
+    const currYear = today.getFullYear();
+
+    let savingsDetails = [];
+    for (let i = 0; i < 6; i++) {
+        //calc month to fetch budgets from
+        const [newMonth, newYear] = decrementMonth(currMonth, currYear, i);
+        let monthlyContributions = [];
+        let monthlyTotal = 0;
+        for (const cbn of contributions) {
+            const cbnDate = cbn.date.toDate();
+            if (cbnDate.getMonth() == newMonth && cbnDate.getFullYear() == newYear) {
+                monthlyContributions.push(cbn);
+                monthlyTotal += Number(cbn.amount);
+            }
+        }
+        savingsDetails.push({ month: newMonth, year: newYear, contributions: monthlyContributions, monthlyTotal: monthlyTotal });
+    }
+    return savingsDetails;
 }
 
 const getBudgets = async(budgetsRef) => {
@@ -82,11 +106,13 @@ const getSavings = async(savingsRef) => {
             contributions.push({ ref: doc.ref, ...doc.data() });
             currentSum += Number(doc.data().amount);
         });
+        const details = createSavingData(contributions)
         savings.push({
             ref: doc.ref,
             contributionsRef: contributionsRef,
             contributions: contributions,
             current: currentSum,
+            monthlyBreakdown: details,
             ...doc.data(),
         });
     }
@@ -172,7 +198,7 @@ const setEditingRef = (ref) => {
 const setBudgetDashboard = (budget) => {
     return async(dispatch, getState) => {
         //set data
-        console.log('set dashboard:')
+        console.log('set dashboard')
         await dispatch({
             type: SET_BUDGET_REF,
             payload: { budgetDashboard: budget },
@@ -180,12 +206,25 @@ const setBudgetDashboard = (budget) => {
     };
 };
 
+const setSavingDashboard = (saving) => {
+    return async(dispatch, getState) => {
+        //set data
+        console.log('set dashboard')
+        await dispatch({
+            type: SET_SAVING_REF,
+            payload: { savingDashboard: saving },
+        });
+    };
+};
+
+
 const userActions = {
     loginUser,
     refreshBudgets,
     refreshSavings,
     setEditingRef,
-    setBudgetDashboard
+    setBudgetDashboard,
+    setSavingDashboard
 };
 
 export default userActions;

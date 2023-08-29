@@ -90,9 +90,8 @@ export default function Home({ navigation }) {
                 return (
                   <SavingTile
                     key={saving.title}
-                    title={saving.title}
-                    progress={"$" + saving.current}
-                    total={"$" + saving.goal}
+                    saving={saving}
+                    navigation={navigation}
                   />
                 );
               })}

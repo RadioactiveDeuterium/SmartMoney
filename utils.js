@@ -1,5 +1,5 @@
 export const mapMonthValueToWord = (val) => {
-    var month = '';
+    var month = "";
     switch (val) {
         case 0:
             month = "January";
@@ -39,4 +39,12 @@ export const mapMonthValueToWord = (val) => {
             break;
     }
     return month;
-}
+};
+
+export const monthDiff = (dateFrom, dateTo) => {
+    return (
+        dateTo.getMonth() -
+        dateFrom.getMonth() +
+        12 * (dateTo.getFullYear() - dateFrom.getFullYear())
+    );
+};

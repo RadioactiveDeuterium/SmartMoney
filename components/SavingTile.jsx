@@ -1,19 +1,28 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Pressable } from "react-native";
+import { useDispatch } from "react-redux";
+import reduxActions from "../redux/actions";
 
-export default function SavingTile({ title, progress, total }) {
+export default function SavingTile({ saving, navigation }) {
+  const dispatch = useDispatch();
+
+  const navigateToDashboard = () => {
+    dispatch(reduxActions.userActions.setSavingDashboard(saving));
+    navigation.navigate("Saving Dashboard");
+  }
+
   return (
-    <View style={styles.container}>
+    <Pressable onPress={navigateToDashboard} style={styles.container}>
       <View style={styles.leftHalf}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{saving.title}</Text>
         <Text style={styles.value}>
-          {progress}/{total}
+          ${saving.current}/${saving.goal}
         </Text>
       </View>
       <Image
         style={styles.image}
         source={require("../assets/right-arrow.png")}
       />
-    </View>
+    </Pressable>
   );
 }
 

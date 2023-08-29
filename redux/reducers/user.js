@@ -4,6 +4,7 @@ import {
     REFRESH_SAVINGS,
     SET_BUDGET_REF,
     SET_EDITING_REF,
+    SET_SAVING_REF,
 } from "../constants";
 import { createReducer } from "@reduxjs/toolkit";
 
@@ -18,6 +19,7 @@ const initialState = {
     savings: null,
     editingRef: null,
     budgetDashboard: null,
+    savingDashboard: null,
 };
 
 const userReducer = createReducer(initialState, (builder) => {
@@ -42,6 +44,9 @@ const userReducer = createReducer(initialState, (builder) => {
     });
     builder.addCase(SET_BUDGET_REF, (state, action) => {
         state.budgetDashboard = action.payload.budgetDashboard;
+    });
+    builder.addCase(SET_SAVING_REF, (state, action) => {
+        state.savingDashboard = action.payload.savingDashboard;
     });
 });
 

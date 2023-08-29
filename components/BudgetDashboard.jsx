@@ -53,7 +53,6 @@ export default function BudgetDashboard() {
     if (budget.transactions) {
       let recentTxns = budget.transactions.slice(0, 3);
       setRecents(recentTxns);
-      console.log(recentTxns);
     }
   }, [budget]);
 
