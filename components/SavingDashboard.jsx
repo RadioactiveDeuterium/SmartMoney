@@ -22,6 +22,7 @@ export default function SavingDashboard() {
   const [average, setAverage] = useState('')
   const [estimate, setEstimate] = useState('');
   const [timeToGoal, setTimeToGoal] = useState('');
+  const [tip, setTip] = useState('');
   const [chartLabels, setChartLabels] = useState([]);
   const [chartValues, setChartValues] = useState([]);
 
@@ -42,10 +43,7 @@ export default function SavingDashboard() {
     }
     average = Math.round(average / averageCount);
     const remainingToSave = saving.goal - saving.current;
-    console.log(remainingToSave)
-    console.log(average)
     const timeEstimate = Math.round(remainingToSave/average);
-    console.log(timeEstimate)
     setAverage(average);
     setEstimate(timeEstimate + " Months")
     setChartLabels(chartLabs.reverse());
@@ -72,6 +70,14 @@ export default function SavingDashboard() {
       }
     }
   }, [saving]);
+
+  useEffect(() => {
+    if (timeToGoal < estimate) {
+      setTip("Uh Oh, looks like you are not on track to complete your goal on schedule. Try increasing your monthly contributions.");
+    } else {
+      setTip("Great work, you are on track to reach your goal on time!")
+    }
+  })
 
   return (
     <>
@@ -137,6 +143,9 @@ export default function SavingDashboard() {
           <Text style={styles.infoMainText}>{estimate}</Text>
           <Text style={styles.infoSubText}>Until{"\n"}Estimated{"\n"}Completion</Text>
         </View>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.tipText}>{tip}</Text>
       </View>
     </>
   );
@@ -228,5 +237,9 @@ const styles = StyleSheet.create({
   },
   infoSubText: {
     fontSize: 16
+  },
+  tipText: {
+    paddingHorizontal: 8,
+    paddingVertical: 6
   }
 });
