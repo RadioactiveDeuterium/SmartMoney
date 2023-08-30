@@ -5,3 +5,5 @@ export const REFRESH_SAVINGS = 'REFRESH_SAVINGS';
 export const SET_EDITING_REF = 'SET_EDITING_REF';
 export const SET_BUDGET_REF = 'SET_BUDGET_REF';
 export const SET_SAVING_REF = 'SET_SAVING_REF';
+export const SET_VIEW_TXNS = 'SET_VIEW_TXNS';
+export const SET_VIEW_CBNS = 'SET_VIEW_CBNS';

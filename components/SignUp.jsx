@@ -121,6 +121,7 @@ export default function SignUp({ navigation }) {
           value={password}
           onChangeText={onChangePassword}
           placeholder="Password"
+          secureTextEntry
         />
         {/* Confirm Password Input */}
         <TextInput
@@ -128,6 +129,7 @@ export default function SignUp({ navigation }) {
           value={confirmPassword}
           onChangeText={onChangeConfirmPassword}
           placeholder="Confirm Password"
+          secureTextEntry
         />
         {!passwordsMatch ? (
           <Text style={styles.errorText}>Passwords must match!</Text>

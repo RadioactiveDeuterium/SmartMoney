@@ -5,6 +5,8 @@ import {
     SET_BUDGET_REF,
     SET_EDITING_REF,
     SET_SAVING_REF,
+    SET_VIEW_CBNS,
+    SET_VIEW_TXNS,
 } from "../constants";
 import { createReducer } from "@reduxjs/toolkit";
 
@@ -20,6 +22,8 @@ const initialState = {
     editingRef: null,
     budgetDashboard: null,
     savingDashboard: null,
+    viewTransactions: null,
+    viewContributions: null,
 };
 
 const userReducer = createReducer(initialState, (builder) => {
@@ -47,6 +51,12 @@ const userReducer = createReducer(initialState, (builder) => {
     });
     builder.addCase(SET_SAVING_REF, (state, action) => {
         state.savingDashboard = action.payload.savingDashboard;
+    });
+    builder.addCase(SET_VIEW_TXNS, (state, action) => {
+        state.viewTransactions = action.payload.viewTransactions;
+    });
+    builder.addCase(SET_VIEW_CBNS, (state, action) => {
+        state.viewContributions = action.payload.viewContributions;
     });
 });
 

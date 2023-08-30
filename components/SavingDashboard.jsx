@@ -7,14 +7,16 @@ import {
   Pressable,
   Image
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { mapMonthValueToWord } from "../utils";
 import ProgressCircle from "react-native-progress-circle";
 import { BarChart } from "react-native-chart-kit";
 import { monthDiff } from "../utils";
+import reduxActions from "../redux/actions";
 
-export default function SavingDashboard() {
+export default function SavingDashboard({ navigation }) {
+  const dispatch = useDispatch();
   const saving = useSelector((state) => state.userReducer.savingDashboard);
   const [percentage, setPercentage] = useState(0);
   const [saved, setSaved] = useState(0);
@@ -79,6 +81,11 @@ export default function SavingDashboard() {
     }
   })
 
+  const viewAllCbns = () => {
+    dispatch(reduxActions.userActions.setViewContributions(saving.contributions));
+    navigation.navigate("View All Contributions");
+  }
+
   return (
     <>
       {/* Progress */}
@@ -127,7 +134,7 @@ export default function SavingDashboard() {
         bezier
         style={{}}
       />
-      <Pressable style={styles.contributionsContainer}>
+      <Pressable style={styles.contributionsContainer} onPress={viewAllCbns}>
         <Text style={styles.contributionsText}>View Contributions</Text>
         <Image
         style={styles.image}

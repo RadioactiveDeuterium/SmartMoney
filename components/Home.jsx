@@ -11,10 +11,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import BudgetTile from "./BudgetTile";
 import SavingTile from "./SavingTile";
-import reduxActions from "../redux/actions";
+// import reduxActions from "../redux/actions";
 
 export default function Home({ navigation }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const name = useSelector((state) => state.userReducer.name);
   const budgets = useSelector((state) => state.userReducer.budgets);
   const savings = useSelector((state) => state.userReducer.savings);
@@ -124,7 +124,7 @@ export default function Home({ navigation }) {
               </Text>
             </Pressable>
           </View>
-          <Pressable onPress={() => dispatch(reduxActions.userActions.refreshBudgets())}><Text style={styles.halfButtonText}>RELOAD</Text></Pressable>
+          {/* <Pressable onPress={() => dispatch(reduxActions.userActions.refreshBudgets())}><Text style={styles.halfButtonText}>RELOAD</Text></Pressable> */}
         </ScrollView>
       </View>
     </View>

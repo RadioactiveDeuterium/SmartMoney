@@ -6,14 +6,16 @@ import {
   Dimensions,
   Pressable,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { mapMonthValueToWord } from "../utils";
 import ProgressCircle from "react-native-progress-circle";
 import { BarChart } from "react-native-chart-kit";
+import reduxActions from "../redux/actions";
 
-export default function BudgetDashboard() {
+export default function BudgetDashboard({ navigation }) {
+  const dispatch = useDispatch();
   const budget = useSelector((state) => state.userReducer.budgetDashboard);
   const [activeMonthData, setActiveMonthData] = useState(null);
   const [percentage, setPercentage] = useState(0);
@@ -22,6 +24,7 @@ export default function BudgetDashboard() {
   const [chartLabels, setChartLabels] = useState([]);
   const [chartValues, setChartValues] = useState([]);
   const [recents, setRecents] = useState([]);
+  const [tip, setTip] = useState("");
 
   // dropdown
   const [monthDropdownOpen, setMonthDropdownOpen] = useState(false);
@@ -75,6 +78,21 @@ export default function BudgetDashboard() {
       setTotal(budget.amount);
     }
   }, [activeMonthData]);
+
+  useEffect(() => {
+    if (percentage <= 100) {
+      setTip("Looks like you are under you budget. Good work!");
+    } else {
+      setTip(
+        "Uh oh, looks like you are over you budget, try to cut back on spending next month."
+      );
+    }
+  });
+
+  const viewAllTxns = () => {
+    dispatch(reduxActions.userActions.setViewTransactions(budget.transactions));
+    navigation.navigate("View All Transactions");
+  };
 
   return (
     <>
@@ -135,7 +153,10 @@ export default function BudgetDashboard() {
         <Text style={styles.recentText}>Recent Transactions:</Text>
         {recents.map((item) => {
           return (
-            <View style={styles.recentContainer}>
+            <View
+              style={styles.recentContainer}
+              key={item.amount + item.merchant}
+            >
               <Text style={styles.recentText}>${item.amount}&nbsp;</Text>
               <Text style={styles.recentText}>{item.merchant}&nbsp;</Text>
               <Text style={styles.recentTextGrow}>
@@ -144,9 +165,12 @@ export default function BudgetDashboard() {
             </View>
           );
         })}
-        <Pressable style={styles.viewAll}>
+        <Pressable style={styles.viewAll} onPress={viewAllTxns}>
           <Text style={styles.viewAllText}>View All ➡</Text>
         </Pressable>
+        <View style={styles.infoContainer}>
+          <Text style={styles.tipText}>{tip}</Text>
+        </View>
       </View>
     </>
   );
@@ -209,6 +233,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   viewAllText: {
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
+  infoContainer: {
+    backgroundColor: "lightgray",
+    borderRadius: 20,
+    width: "100%",
+    flexDirection: "row",
+    alignSelf: "center",
+    marginTop: 12,
+  },
+  tipText: {
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+  },
 });

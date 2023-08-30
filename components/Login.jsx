@@ -53,6 +53,7 @@ export default function Login({ navigation }) {
           value={password}
           placeholder="Password"
           onChangeText={onChangePassword}
+          secureTextEntry
         />
         {/* Error Field */}
         {errorMessage !== "" ? (

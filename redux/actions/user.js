@@ -5,6 +5,8 @@ import {
     SET_BUDGET_REF,
     SET_EDITING_REF,
     SET_SAVING_REF,
+    SET_VIEW_CBNS,
+    SET_VIEW_TXNS,
 } from "../constants";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 
@@ -217,6 +219,28 @@ const setSavingDashboard = (saving) => {
     };
 };
 
+const setViewTransactions = (transactions) => {
+    return async(dispatch, getState) => {
+        //set data
+        console.log('set view transactions')
+        await dispatch({
+            type: SET_VIEW_TXNS,
+            payload: { viewTransactions: transactions },
+        });
+    };
+};
+
+const setViewContributions = (contributions) => {
+    return async(dispatch, getState) => {
+        //set data
+        console.log('set view contributions')
+        console.log(contributions);
+        await dispatch({
+            type: SET_VIEW_CBNS,
+            payload: { viewContributions: contributions },
+        });
+    };
+};
 
 const userActions = {
     loginUser,
@@ -224,7 +248,9 @@ const userActions = {
     refreshSavings,
     setEditingRef,
     setBudgetDashboard,
-    setSavingDashboard
+    setSavingDashboard,
+    setViewTransactions,
+    setViewContributions,
 };
 
 export default userActions;

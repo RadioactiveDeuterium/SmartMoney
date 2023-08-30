@@ -20,6 +20,8 @@ import NewTransaction from "./components/NewTransaction";
 import NewContribution from "./components/NewContribution";
 import BudgetDashboard from "./components/BudgetDashboard";
 import SavingDashboard from "./components/SavingDashboard";
+import ViewAllTransactions from "./components/ViewAllTransactions";
+import ViewAllContributions from "./components/ViewAllContributions";
 
 export default function Navigation() {
   const dispatch = useDispatch();
@@ -97,6 +99,16 @@ export default function Navigation() {
             name="Saving Dashboard"
             component={SavingDashboard}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="View All Transactions"
+            component={ViewAllTransactions}
+            options={{ headerTitleAlign: "center" }}
+          />
+          <Stack.Screen
+            name="View All Contributions"
+            component={ViewAllContributions}
+            options={{ headerTitleAlign: "center" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
