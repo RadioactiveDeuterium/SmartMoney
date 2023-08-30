@@ -6,11 +6,14 @@ import {
   Image,
   ScrollView,
   Pressable,
+  Dimensions,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import BudgetTile from "./BudgetTile";
 import SavingTile from "./SavingTile";
+import { mapMonthValueToWord } from "../utils";
+import { LineChart } from "react-native-chart-kit";
 // import reduxActions from "../redux/actions";
 
 export default function Home({ navigation }) {
@@ -20,6 +23,9 @@ export default function Home({ navigation }) {
   const savings = useSelector((state) => state.userReducer.savings);
   const [selected, setSelected] = useState("spend");
   const [greeting, setGreeting] = useState("Good Morning,");
+  const [currentSpendTotal, setCurrentSpendTotal] = useState("");
+  const [currentSavedTotal, setCurrentSavedTotal] = useState("");
+  const [currentMonth, setCurrentMonth] = useState("");
 
   useEffect(() => {
     const date = new Date();
@@ -30,6 +36,24 @@ export default function Home({ navigation }) {
       setGreeting("Good Evening,");
     }
   }, []);
+
+  //budget chart data
+  useEffect(() => {
+    if (budgets && savings) {
+      const currMonth = budgets[0].monthlyBreakdown[0].month;
+      let currMonthBudTotal = 0;
+      for (const budget of budgets) {
+        currMonthBudTotal += budget.monthlyBreakdown[0].monthlyTotal;
+      }
+      let currMonthSavTotal = 0;
+      for (const saving of savings) {
+        currMonthSavTotal += saving.monthlyBreakdown[0].monthlyTotal;
+      }
+      setCurrentMonth(mapMonthValueToWord(currMonth));
+      setCurrentSavedTotal(currMonthSavTotal);
+      setCurrentSpendTotal(currMonthBudTotal);
+    }
+  }, [budgets]);
 
   return (
     <View style={styles.container}>
@@ -68,6 +92,21 @@ export default function Home({ navigation }) {
             Save
           </Text>
         </View>
+        {selected == "spend" ? (
+          <View>
+            <Text style={styles.currentStatTitleText}>
+              Total spending in {currentMonth}:
+            </Text>
+            <Text style={styles.currentStatText}>${currentSpendTotal}</Text>
+          </View>
+        ) : (
+          <View>
+            <Text style={styles.currentStatTitleText}>
+              Total saved in {currentMonth}:
+            </Text>
+            <Text style={styles.currentStatText}>${currentSavedTotal}</Text>
+          </View>
+        )}
       </View>
       {/* Lower Container (white section) */}
       <View>
@@ -215,5 +254,16 @@ const styles = StyleSheet.create({
   halfButtonText: {
     textAlign: "center",
     fontSize: 20,
+  },
+  currentStatTitleText: {
+    fontSize: 24,
+    width: "100%",
+    textAlign: "center",
+    marginVertical: 20,
+  },
+  currentStatText: {
+    fontSize: 30,
+    width: "100%",
+    textAlign: "center",
   },
 });

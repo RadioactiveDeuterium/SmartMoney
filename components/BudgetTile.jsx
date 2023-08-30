@@ -24,7 +24,7 @@ export default function BudgetTile({ budget, navigation }) {
       />
       <Text style={styles.title}>{budget.title}</Text>
       <Text style={styles.value}>
-        ${budget.current}/${budget.amount}
+        ${budget.monthlyBreakdown[0].monthlyTotal}/${budget.amount}
       </Text>
     </Pressable>
   );
