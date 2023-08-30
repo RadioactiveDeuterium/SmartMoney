@@ -18,7 +18,7 @@ const decrementMonth = (month, year, i) => {
         newYear = year - 1;
     }
     return [newMonth, newYear];
-}
+};
 
 const createBudgetData = (transactions) => {
     // budgets will be categorized by month
@@ -41,10 +41,15 @@ const createBudgetData = (transactions) => {
                 monthlyTotal += Number(txn.amount);
             }
         }
-        budgetDetails.push({ month: newMonth, year: newYear, transactions: monthlyTransactions, monthlyTotal: monthlyTotal });
+        budgetDetails.push({
+            month: newMonth,
+            year: newYear,
+            transactions: monthlyTransactions,
+            monthlyTotal: monthlyTotal,
+        });
     }
     return budgetDetails;
-}
+};
 
 const createSavingData = (contributions) => {
     const today = new Date();
@@ -64,10 +69,15 @@ const createSavingData = (contributions) => {
                 monthlyTotal += Number(cbn.amount);
             }
         }
-        savingsDetails.push({ month: newMonth, year: newYear, contributions: monthlyContributions, monthlyTotal: monthlyTotal });
+        savingsDetails.push({
+            month: newMonth,
+            year: newYear,
+            contributions: monthlyContributions,
+            monthlyTotal: monthlyTotal,
+        });
     }
     return savingsDetails;
-}
+};
 
 const getBudgets = async(budgetsRef) => {
     let budgets = [];
@@ -108,7 +118,7 @@ const getSavings = async(savingsRef) => {
             contributions.push({ ref: doc.ref, ...doc.data() });
             currentSum += Number(doc.data().amount);
         });
-        const details = createSavingData(contributions)
+        const details = createSavingData(contributions);
         savings.push({
             ref: doc.ref,
             contributionsRef: contributionsRef,
@@ -174,7 +184,7 @@ const refreshBudgets = () => {
 
 const refreshSavings = () => {
     return async(dispatch, getState) => {
-        console.log("refreshing savings")
+        console.log("refreshing savings");
         const state = getState();
         const savingsRef = state.userReducer.savingsRef;
         const savings = await getSavings(savingsRef);
@@ -200,7 +210,7 @@ const setEditingRef = (ref) => {
 const setBudgetDashboard = (budget) => {
     return async(dispatch, getState) => {
         //set data
-        console.log('set dashboard')
+        console.log("set budget dashboard");
         await dispatch({
             type: SET_BUDGET_REF,
             payload: { budgetDashboard: budget },
@@ -211,7 +221,7 @@ const setBudgetDashboard = (budget) => {
 const setSavingDashboard = (saving) => {
     return async(dispatch, getState) => {
         //set data
-        console.log('set dashboard')
+        console.log("set savings dashboard");
         await dispatch({
             type: SET_SAVING_REF,
             payload: { savingDashboard: saving },
@@ -222,7 +232,7 @@ const setSavingDashboard = (saving) => {
 const setViewTransactions = (transactions) => {
     return async(dispatch, getState) => {
         //set data
-        console.log('set view transactions')
+        console.log("set view transactions");
         await dispatch({
             type: SET_VIEW_TXNS,
             payload: { viewTransactions: transactions },
@@ -233,8 +243,7 @@ const setViewTransactions = (transactions) => {
 const setViewContributions = (contributions) => {
     return async(dispatch, getState) => {
         //set data
-        console.log('set view contributions')
-        console.log(contributions);
+        console.log("set view contributions");
         await dispatch({
             type: SET_VIEW_CBNS,
             payload: { viewContributions: contributions },

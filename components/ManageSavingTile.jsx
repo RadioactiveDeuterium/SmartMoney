@@ -2,19 +2,17 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   Pressable,
   Alert,
   ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
-import { updateDoc, deleteDoc } from "firebase/firestore";
+import { deleteDoc } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import reduxActions from "../redux/actions";
 
 export default function ManageSavingTile({ saving, navigation }) {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const deleteSaving = async () => {
@@ -35,7 +33,7 @@ export default function ManageSavingTile({ saving, navigation }) {
   const editSaving = () => {
     dispatch(reduxActions.userActions.setEditingRef(saving));
     navigation.navigate("Edit Goal");
-  }
+  };
 
   return (
     <View style={styles.container}>

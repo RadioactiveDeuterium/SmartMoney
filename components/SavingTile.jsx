@@ -8,7 +8,7 @@ export default function SavingTile({ saving, navigation }) {
   const navigateToDashboard = () => {
     dispatch(reduxActions.userActions.setSavingDashboard(saving));
     navigation.navigate("Saving Dashboard");
-  }
+  };
 
   return (
     <Pressable onPress={navigateToDashboard} style={styles.container}>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginRight: 6,
-    marginVertical: 10
+    marginVertical: 10,
   },
   title: {
     fontSize: 24,
@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
   },
   leftHalf: {
     marginLeft: 8,
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 });

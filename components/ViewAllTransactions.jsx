@@ -1,6 +1,5 @@
 import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import { deleteDoc } from "firebase/firestore";
 import reduxActions from "../redux/actions";
 

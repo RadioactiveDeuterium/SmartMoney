@@ -2,9 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   Pressable,
-  Modal,
   TextInput,
   ActivityIndicator,
 } from "react-native";
@@ -18,10 +16,10 @@ export default function EditSaving({ navigation }) {
   const dispatch = useDispatch();
   const editingSaving = useSelector((state) => state.userReducer.editingRef);
 
-  const [title, setTitle] = useState(editingSaving.title || '');
-  const [goal, setGoal] = useState(editingSaving.goal || '');
-  const [date, setDate] = useState(editingSaving.date.toDate() || new Date);
-  const [returnRate, setReturnRate] = useState(editingSaving.returnRate || '');
+  const [title, setTitle] = useState(editingSaving.title || "");
+  const [goal, setGoal] = useState(editingSaving.goal || "");
+  const [date, setDate] = useState(editingSaving.date.toDate() || new Date());
+  const [returnRate, setReturnRate] = useState(editingSaving.returnRate || "");
   const [dateModalOpen, setDateModalOpen] = useState(false);
   const [canCreate, setCanCreate] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -31,7 +29,7 @@ export default function EditSaving({ navigation }) {
   useEffect(() => {
     setIsGoalValid(/^[0-9]+$/.test(goal));
     setIsReturnRateValid(/^[0-9]+$/.test(returnRate));
-    setCanCreate(isGoalValid && isReturnRateValid && title !== '');
+    setCanCreate(isGoalValid && isReturnRateValid && title !== "");
   }, [goal, isGoalValid, returnRate, isReturnRateValid, title]);
 
   const onDateConfirm = useCallback(
@@ -76,7 +74,7 @@ export default function EditSaving({ navigation }) {
           value={goal}
           onChangeText={setGoal}
         />
-        {!isGoalValid && goal !== '' ? (
+        {!isGoalValid && goal !== "" ? (
           <Text style={styles.errorText}>Goal must be a number!</Text>
         ) : null}
         {/* Completion date */}
@@ -95,7 +93,7 @@ export default function EditSaving({ navigation }) {
           value={returnRate}
           onChangeText={setReturnRate}
         />
-        {!isReturnRateValid && returnRate !== '' ? (
+        {!isReturnRateValid && returnRate !== "" ? (
           <Text style={styles.errorText}>Return rate must be a number!</Text>
         ) : null}
         <Pressable style={canCreate ? styles.button : styles.buttonDisabled}>
@@ -153,6 +151,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    marginBottom: 12
+    marginBottom: 12,
   },
 });

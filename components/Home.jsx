@@ -7,7 +7,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import BudgetTile from "./BudgetTile";
 import SavingTile from "./SavingTile";
@@ -19,17 +19,17 @@ export default function Home({ navigation }) {
   const budgets = useSelector((state) => state.userReducer.budgets);
   const savings = useSelector((state) => state.userReducer.savings);
   const [selected, setSelected] = useState("spend");
-  const [greeting, setGreeting] = useState("Good Morning,")
+  const [greeting, setGreeting] = useState("Good Morning,");
 
-  useEffect(() => { 
+  useEffect(() => {
     const date = new Date();
     const hour = date.getHours();
     if (hour > 12 && hour < 17) {
       setGreeting("Good Afternoon,");
     } else if (hour >= 17) {
-      setGreeting("Good Evening,")
+      setGreeting("Good Evening,");
     }
-  }, [])
+  }, []);
 
   return (
     <View style={styles.container}>

@@ -2,24 +2,30 @@ import { StyleSheet, Text, Image, Pressable } from "react-native";
 import { useDispatch } from "react-redux";
 import reduxActions from "../redux/actions";
 
-export default function BudgetTile({budget, navigation}) {
+export default function BudgetTile({ budget, navigation }) {
   const dispatch = useDispatch();
-  const underArrow = require("../assets/under-arrow.png")
-  const overArrow = require("../assets/over-arrow.png")
+  const underArrow = require("../assets/under-arrow.png");
+  const overArrow = require("../assets/over-arrow.png");
 
   const navigateToDashboard = () => {
     dispatch(reduxActions.userActions.setBudgetDashboard(budget));
     navigation.navigate("Budget Dashboard");
-  }
+  };
 
   return (
     <Pressable onPress={navigateToDashboard} style={styles.container}>
       <Image
-            style={styles.image}
-            source={(Number(budget.current) > Number(budget.amount)) ? overArrow : underArrow }
-          />
+        style={styles.image}
+        source={
+          Number(budget.current) > Number(budget.amount)
+            ? overArrow
+            : underArrow
+        }
+      />
       <Text style={styles.title}>{budget.title}</Text>
-      <Text style={styles.value}>${budget.current}/${budget.amount}</Text>
+      <Text style={styles.value}>
+        ${budget.current}/${budget.amount}
+      </Text>
     </Pressable>
   );
 }
@@ -27,26 +33,26 @@ export default function BudgetTile({budget, navigation}) {
 const styles = StyleSheet.create({
   container: {
     width: "90%",
-    alignSelf: 'center',
+    alignSelf: "center",
     backgroundColor: "lightgray",
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingVertical: 8,
     borderRadius: 30,
     paddingHorizontal: 6,
-    marginVertical: 6
+    marginVertical: 6,
   },
   image: {
     width: 30,
     height: 30,
     marginVertical: 5,
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
   title: {
     fontSize: 26,
     flexGrow: 1,
-    paddingLeft: 6
+    paddingLeft: 6,
   },
   value: {
     fontSize: 26,
-  }
+  },
 });

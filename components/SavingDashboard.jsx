@@ -5,7 +5,7 @@ import {
   Text,
   Dimensions,
   Pressable,
-  Image
+  Image,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
@@ -21,10 +21,10 @@ export default function SavingDashboard({ navigation }) {
   const [percentage, setPercentage] = useState(0);
   const [saved, setSaved] = useState(0);
   const [total, setTotal] = useState(0);
-  const [average, setAverage] = useState('')
-  const [estimate, setEstimate] = useState('');
-  const [timeToGoal, setTimeToGoal] = useState('');
-  const [tip, setTip] = useState('');
+  const [average, setAverage] = useState("");
+  const [estimate, setEstimate] = useState("");
+  const [timeToGoal, setTimeToGoal] = useState("");
+  const [tip, setTip] = useState("");
   const [chartLabels, setChartLabels] = useState([]);
   const [chartValues, setChartValues] = useState([]);
 
@@ -45,9 +45,9 @@ export default function SavingDashboard({ navigation }) {
     }
     average = Math.round(average / averageCount);
     const remainingToSave = saving.goal - saving.current;
-    const timeEstimate = Math.round(remainingToSave/average);
+    const timeEstimate = Math.round(remainingToSave / average);
     setAverage(average);
-    setEstimate(timeEstimate + " Months")
+    setEstimate(timeEstimate + " Months");
     setChartLabels(chartLabs.reverse());
     setChartValues(chartVals.reverse());
   }, [saving]);
@@ -56,15 +56,13 @@ export default function SavingDashboard({ navigation }) {
   useEffect(() => {
     if (saving) {
       setPercentage(
-        Math.round(
-          (Number(saving.current) / Number(saving.goal)) * 100
-        )
+        Math.round((Number(saving.current) / Number(saving.goal)) * 100)
       );
       setSaved(saving.current);
       setTotal(saving.goal);
       const today = new Date();
       const goalDate = saving.date.toDate();
-      const remaining = monthDiff(today, goalDate)
+      const remaining = monthDiff(today, goalDate);
       if (remaining >= 0) {
         setTimeToGoal(remaining + " Months Remaining");
       } else {
@@ -75,16 +73,20 @@ export default function SavingDashboard({ navigation }) {
 
   useEffect(() => {
     if (timeToGoal < estimate) {
-      setTip("Uh Oh, looks like you are not on track to complete your goal on schedule. Try increasing your monthly contributions.");
+      setTip(
+        "Uh Oh, looks like you are not on track to complete your goal on schedule. Try increasing your monthly contributions."
+      );
     } else {
-      setTip("Great work, you are on track to reach your goal on time!")
+      setTip("Great work, you are on track to reach your goal on time!");
     }
-  })
+  });
 
   const viewAllCbns = () => {
-    dispatch(reduxActions.userActions.setViewContributions(saving.contributions));
+    dispatch(
+      reduxActions.userActions.setViewContributions(saving.contributions)
+    );
     navigation.navigate("View All Contributions");
-  }
+  };
 
   return (
     <>
@@ -103,9 +105,7 @@ export default function SavingDashboard({ navigation }) {
             <Text style={styles.progressText}>{percentage}%</Text>
           </ProgressCircle>
         </View>
-        <Text style={styles.progressSubText}>
-          {timeToGoal}
-        </Text>
+        <Text style={styles.progressSubText}>{timeToGoal}</Text>
         <Text style={styles.progressSubText2}>
           ${saved}/${total}
         </Text>
@@ -137,18 +137,22 @@ export default function SavingDashboard({ navigation }) {
       <Pressable style={styles.contributionsContainer} onPress={viewAllCbns}>
         <Text style={styles.contributionsText}>View Contributions</Text>
         <Image
-        style={styles.image}
-        source={require("../assets/right-arrow.png")}
-      />
+          style={styles.image}
+          source={require("../assets/right-arrow.png")}
+        />
       </Pressable>
       <View style={styles.infoContainer}>
         <View style={styles.infoLeft}>
           <Text style={styles.infoMainText}>${average}</Text>
-          <Text style={styles.infoSubText}>Average{"\n"}Monthly{"\n"}Contribution</Text>
+          <Text style={styles.infoSubText}>
+            Average{"\n"}Monthly{"\n"}Contribution
+          </Text>
         </View>
         <View style={styles.infoRight}>
           <Text style={styles.infoMainText}>{estimate}</Text>
-          <Text style={styles.infoSubText}>Until{"\n"}Estimated{"\n"}Completion</Text>
+          <Text style={styles.infoSubText}>
+            Until{"\n"}Estimated{"\n"}Completion
+          </Text>
         </View>
       </View>
       <View style={styles.infoContainer}>
@@ -204,49 +208,49 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginLeft: 6,
-    marginVertical: 10
+    marginVertical: 10,
   },
   contributionsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: "lightgray",
     borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 10,
-    width: '90%',
-    alignSelf: 'center',
-    marginTop: 10
+    width: "90%",
+    alignSelf: "center",
+    marginTop: 10,
   },
   contributionsText: {
-    fontSize: 24
+    fontSize: 24,
   },
   infoContainer: {
     backgroundColor: "lightgray",
     borderRadius: 20,
-    width: '90%',
-    flexDirection: 'row',
-    alignSelf: 'center',
-    marginTop: 12
+    width: "90%",
+    flexDirection: "row",
+    alignSelf: "center",
+    marginTop: 12,
   },
   infoLeft: {
-    width: '50%',
+    width: "50%",
     borderRightWidth: 2,
     paddingLeft: 8,
-    paddingVertical: 2
+    paddingVertical: 2,
   },
   infoRight: {
-    width: '50%',
+    width: "50%",
     paddingLeft: 8,
-    paddingVertical: 2
+    paddingVertical: 2,
   },
   infoMainText: {
-    fontSize: 26
+    fontSize: 26,
   },
   infoSubText: {
-    fontSize: 16
+    fontSize: 16,
   },
   tipText: {
     paddingHorizontal: 8,
-    paddingVertical: 6
-  }
+    paddingVertical: 6,
+  },
 });

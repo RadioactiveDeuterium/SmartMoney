@@ -2,9 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   Pressable,
-  Modal,
   TextInput,
   ActivityIndicator,
 } from "react-native";
@@ -31,7 +29,7 @@ export default function CreateSaving({ navigation }) {
   useEffect(() => {
     setIsGoalValid(/^[0-9]+$/.test(goal));
     setIsReturnRateValid(/^[0-9]+$/.test(returnRate));
-    setCanCreate(isGoalValid && isReturnRateValid && title !== '');
+    setCanCreate(isGoalValid && isReturnRateValid && title !== "");
   }, [goal, isGoalValid, returnRate, isReturnRateValid, title]);
 
   const onDateConfirm = useCallback(
@@ -76,7 +74,7 @@ export default function CreateSaving({ navigation }) {
           value={goal}
           onChangeText={setGoal}
         />
-        {!isGoalValid && goal !== '' ? (
+        {!isGoalValid && goal !== "" ? (
           <Text style={styles.errorText}>Goal must be a number!</Text>
         ) : null}
         {/* Completion date */}
@@ -95,7 +93,7 @@ export default function CreateSaving({ navigation }) {
           value={returnRate}
           onChangeText={setReturnRate}
         />
-        {!isReturnRateValid && returnRate !== '' ? (
+        {!isReturnRateValid && returnRate !== "" ? (
           <Text style={styles.errorText}>Return rate must be a number!</Text>
         ) : null}
         <Pressable style={canCreate ? styles.button : styles.buttonDisabled}>
@@ -153,6 +151,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    marginBottom: 12
+    marginBottom: 12,
   },
 });
