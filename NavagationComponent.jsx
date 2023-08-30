@@ -6,24 +6,24 @@ import {
 } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import reduxActions from "../redux/actions";
+import reduxActions from "./redux/actions";
 import { enGB, registerTranslation } from 'react-native-paper-dates'
 
-import Login from "./Login";
-import SignUp from "./SignUp";
-import Home from "./Home";
-import ManageBudgets from "./ManageBudgets";
-import ManageSavings from "./ManageSavings";
-import CreateSaving from "./CreateSaving";
-import EditSaving from "./EditSaving";
-import NewTransaction from "./NewTransaction";
-import NewContribution from "./NewContribution";
-import BudgetDashboard from "./BudgetDashboard";
-import SavingDashboard from "./SavingDashboard";
-import ViewAllTransactions from "./ViewAllTransactions";
-import ViewAllContributions from "./ViewAllContributions";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+import Home from "./components/Home";
+import ManageBudgets from "./components/ManageBudgets";
+import ManageSavings from "./components/ManageSavings";
+import CreateSaving from "./components/CreateSaving";
+import EditSaving from "./components/EditSaving";
+import NewTransaction from "./components/NewTransaction";
+import NewContribution from "./components/NewContribution";
+import BudgetDashboard from "./components/BudgetDashboard";
+import SavingDashboard from "./components/SavingDashboard";
+import ViewAllTransactions from "./components/ViewAllTransactions";
+import ViewAllContributions from "./components/ViewAllContributions";
 
-export default function Navigation() {
+export default function NavigationComponent() {
   const dispatch = useDispatch();
   const Stack = createStackNavigator();
 
