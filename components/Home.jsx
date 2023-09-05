@@ -47,13 +47,14 @@ export default function Home({ navigation }) {
       }
       let currMonthSavTotal = 0;
       for (const saving of savings) {
+        console.log(saving.monthlyBreakdown[0])
         currMonthSavTotal += saving.monthlyBreakdown[0].monthlyTotal;
       }
       setCurrentMonth(mapMonthValueToWord(currMonth));
       setCurrentSavedTotal(currMonthSavTotal);
       setCurrentSpendTotal(currMonthBudTotal);
     }
-  }, [budgets]);
+  }, [budgets, savings]);
 
   return (
     <View style={styles.container}>

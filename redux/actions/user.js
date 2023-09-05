@@ -93,6 +93,9 @@ const getBudgets = async(budgetsRef) => {
             currentSum += Number(doc.data().amount);
         });
         const details = createBudgetData(transactions);
+        transactions.sort(function(a, b) {
+            return new Date(b.date.seconds) - new Date(a.date.seconds);
+        });
         budgets.push({
             ref: doc.ref,
             transactionsRef: transactionsRef,

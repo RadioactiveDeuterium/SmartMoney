@@ -46,8 +46,8 @@ export default function SavingDashboard({ navigation }) {
     average = Math.round(average / averageCount);
     const remainingToSave = saving.goal - saving.current;
     const timeEstimate = Math.round(remainingToSave / average);
-    setAverage(average);
-    setEstimate(timeEstimate + " Months");
+    setAverage(average || 0);
+    setEstimate((timeEstimate || '∞') + " Months");
     setChartLabels(chartLabs.reverse());
     setChartValues(chartVals.reverse());
   }, [saving]);
@@ -131,6 +131,7 @@ export default function SavingDashboard({ navigation }) {
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         }}
+        fromZero
         bezier
         style={{}}
       />

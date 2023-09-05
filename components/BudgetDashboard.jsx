@@ -146,6 +146,7 @@ export default function BudgetDashboard({ navigation }) {
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         }}
         bezier
+        fromZero
         style={{}}
       />
       {/* Recent transactions */}
@@ -187,6 +188,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     width: "30%",
+    minWidth: 150,
     alignSelf: "center",
     borderWidth: 0,
     backgroundColor: "#2196f3",

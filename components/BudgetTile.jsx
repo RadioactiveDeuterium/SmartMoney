@@ -17,7 +17,7 @@ export default function BudgetTile({ budget, navigation }) {
       <Image
         style={styles.image}
         source={
-          Number(budget.current) > Number(budget.amount)
+          Number(budget.monthlyBreakdown[0].monthlyTotal) > Number(budget.amount)
             ? overArrow
             : underArrow
         }
